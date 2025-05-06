@@ -698,6 +698,8 @@ Fill in:
 
 ## Add Email Step in Jenkins Pipeline ##
 Include the following in the post section of your Jenkinsfile:
+
+```bash
 post {
     always {
         emailext attachLog: true,
@@ -711,6 +713,7 @@ post {
             to: 'your-email@example.com'
     }
 }
+```
 
 - Test Your Pipeline
 - Commit changes and trigger the Jenkins job.
