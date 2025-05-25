@@ -1,0 +1,9 @@
+instance_type= "t2.large"
+ami= "ami-0e35ddab05955cf57"
+vpc_cidr= "10.0.0.0/16"
+ec2_count= 1
+subnet_count= 2
+aws_availabilty_zones= ["ap-south-1a"]
+key_name= "netfilx-key"
+volume_size= "30"
+volume_type= "gp2"
