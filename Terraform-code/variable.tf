@@ -1,23 +1,39 @@
-output "ec2_public_ips" {
-  value = module.ec2.aws_instance_id
+variable "ami" {
+  type = string
+  description = "the value of ami id"
 }
 
-output "subnets_ids" {
-  value = module.vpc.subnets_ids
+variable "instance_type" {
+  type = string
+  description = "the type of ec2_instance"
 }
 
-output "vpc_id" {
-  value = module.vpc.vpc_id
+variable "ec2_count" {
+  type = number
 }
 
-output "security_group_id" {
-  value = module.vpc.security_group_id
+variable "key_name" {
+  type = string
+  description = "the key name"
 }
 
-output "jenkins_url" {
-  value = module.ec2.jenkins_url
+variable "vpc_cidr" {
+  type = string
+  description = "the cidr range of main vpc"
 }
 
-output "sonarqube_url" {
-  value = module.ec2.sonarquebe_url
+variable "subnet_count" {
+  type = number
+  description = "the no of subnets"
+}
+
+variable "aws_availabilty_zones" {
+  type = list(string)
+}
+
+variable "volume_size" {
+  type = number
+}
+variable "volume_type" {
+  type = string
 }
