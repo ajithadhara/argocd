@@ -6,12 +6,11 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build-push-deploy:
     runs-on: ubuntu-latest
-    environment: ecr-push
 
     steps:
-      - name: Checkout Repository
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
@@ -27,13 +26,16 @@ jobs:
           region: eu-north-1
 
       - name: Build Docker Image
-        run: docker build -t netflix .
+        run: |
+          docker build -t netflix .
 
       - name: Tag Docker Image
-        run: docker tag netflix:latest 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
+        run: |
+          docker tag netflix:latest 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
 
-      - name: Push Docker Image to AWS ECR
-        run: docker push 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
+      - name: Push Docker Image
+        run: |
+          docker push 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
 
       - name: Update kubeconfig for EKS
         run: |
