@@ -18,12 +18,12 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-north-1   # ✅ Required for ECR login
+          aws-region: eu-north-1  # change this if your region is different
 
-      - name: Login to AWS ECR
+      - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
         with:
-          region: eu-north-1       # ✅ Fix for 'Region is missing'
+          region: eu-north-1
 
       - name: Build Docker Image
         run: |
