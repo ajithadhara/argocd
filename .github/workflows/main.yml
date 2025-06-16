@@ -1,4 +1,4 @@
-name: Deploy to AWS ECR and EKS
+name: Deploy to AWS ECR
 
 on:
   push:
@@ -6,9 +6,9 @@ on:
       - main
 
 jobs:
-  build-push-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
-    environment: ecr-push
+    environment: ecr-deploy  # ✅ MUST MATCH your environment name in GitHub
 
     steps:
       - name: Checkout Repository
@@ -37,12 +37,3 @@ jobs:
       - name: Push Docker Image to AWS ECR
         run: |
           docker push 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
-
-      - name: Update kubeconfig for EKS
-        run: |
-          aws eks --region eu-north-1 update-kubeconfig --name netflix-cluster
-
-      - name: Deploy to EKS   # ✅ properly aligned here
-        run: |
-          kubectl apply -f Kubernetes/deployment.yaml
-          kubectl apply -f Kubernetes/service.yaml
