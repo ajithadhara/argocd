@@ -1,16 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: netflix-app
-  labels:
-    app: netflix-app
+  name: netflix-service
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
-    app: netflix-app
+    app: netflix
   ports:
-    - name: http
-      port: 80
+    - port: 80
       targetPort: 80
-      nodePort: 30007
-      protocol: TCP
