@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: ecr-push
+    environment: ecr-push  # ✅ This should match the GitHub Environment where TMDB_V3_API_KEY is defined
 
     steps:
       - name: Checkout Code
@@ -27,7 +27,7 @@ jobs:
       - name: Build Docker Image with TMDB Key
         run: |
           docker build \
-            --build-arg TMDB_V3_API_KEY=${{ secrets.TMDB_V3_API_KEY }} \
+            --build-arg TMDB_V3_API_KEY=${{ vars.TMDB_V3_API_KEY }} \
             -t netflix .
 
       - name: Tag Docker Image
