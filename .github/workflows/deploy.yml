@@ -1,4 +1,4 @@
-name: Build and Push to Amazon ECR
+name: Build and Deploy to ECR (CI Only)
 
 on:
   push:
@@ -8,25 +8,30 @@ on:
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    environment: ecr-push  # MUST match your GitHub environment name
+    environment: ecr-push  # 🔒 Environment storing AWS secrets
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v2
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: eu-north-1
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
 
-    - name: Login to Amazon ECR
-      uses: aws-actions/amazon-ecr-login@v1
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+        with:
+          region: eu-north-1
 
-    - name: Build, Tag, and Push Docker image
-      run: |
-        IMAGE_URI=476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
-        docker build -t netflix .
-        docker tag netflix:latest $IMAGE_URI
-        docker push $IMAGE_URI
+      - name: Build, Tag, and Push Docker Image to ECR
+        run: |
+          docker build -t netflix .
+          docker tag netflix:latest 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
+          docker push 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
+
+      - name: Update Deployment Manifests with New Image Tag (Optional)
+        if: always()  # Add auto-image update script if needed
+        run: echo "Handled by ArgoCD auto-sync"
