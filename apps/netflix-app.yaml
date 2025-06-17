@@ -7,8 +7,8 @@ spec:
   project: default
   source:
     repoURL: https://github.com/pankajsinghveersatech/DevSecOps-Project-first.git
-    targetRevision: HEAD
-    path: Kubernetes
+    targetRevision: main
+    path: Kubernetes  # <-- this should be the folder in your repo that contains your k8s manifests
   destination:
     server: https://kubernetes.default.svc
     namespace: default
@@ -16,3 +16,5 @@ spec:
     automated:
       prune: true
       selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
