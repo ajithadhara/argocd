@@ -1,4 +1,4 @@
-name: Build and Deploy to EKS via ArgoCD
+name: Build and Push to Amazon ECR
 
 on:
   push:
@@ -6,9 +6,9 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
-    environment: ecr-push  # ✅ Must match GitHub environment name where secrets are stored
+    environment: ecr-push  # MUST match your GitHub environment name
 
     steps:
     - name: Checkout code
@@ -24,14 +24,9 @@ jobs:
     - name: Login to Amazon ECR
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build, Tag, and Push Docker Image to ECR
+    - name: Build, Tag, and Push Docker image
       run: |
+        IMAGE_URI=476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
         docker build -t netflix .
-        docker tag netflix:latest 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
-        docker push 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
-
-    # Optional: Check kubeconfig if needed in the future
-    # - name: Update kubeconfig
-    #   run: aws eks --region eu-north-1 update-kubeconfig --name netflix-cluster
-
-    # No webhook needed if ArgoCD is set to auto-sync
+        docker tag netflix:latest $IMAGE_URI
+        docker push $IMAGE_URI
