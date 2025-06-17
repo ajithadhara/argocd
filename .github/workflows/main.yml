@@ -1,21 +1,16 @@
-name: Build and Deploy to EKS via ArgoCD
+name: CI/CD Pipeline - ECR to EKS via ArgoCD
 
 on:
   push:
     branches:
-      - main  # ✅ Change if your prod branch differs
-
-permissions:
-  contents: read
+      - main
 
 jobs:
-  build-and-deploy:
-    name: CI/CD Pipeline: Build Docker Image and Push to ECR
+  build-push:
     runs-on: ubuntu-latest
-    environment: ecr-push  # ✅ Your GitHub environment with secrets
 
     steps:
-      - name: Checkout code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
@@ -28,17 +23,8 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build Docker image
+      - name: Build and Push Docker Image
         run: |
           docker build -t netflix .
-
-      - name: Tag Docker image for ECR
-        run: |
           docker tag netflix:latest 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
-
-      - name: Push Docker image to ECR
-        run: |
           docker push 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
-
-      - name: Done
-        run: echo "✅ Image built and pushed. ArgoCD will auto-sync."
