@@ -1,4 +1,4 @@
-name: CI/CD Pipeline - ECR to EKS via ArgoCD
+name: Build and Deploy to EKS via ArgoCD
 
 on:
   push:
@@ -6,9 +6,10 @@ on:
       - main
 
 jobs:
-  build-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
     environment: ecr-push
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -23,8 +24,16 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build and Push Docker Image
+      - name: Build Docker Image with TMDB Key
         run: |
-          docker build -t netflix .
+          docker build \
+            --build-arg TMDB_V3_API_KEY=${{ secrets.TMDB_V3_API_KEY }} \
+            -t netflix .
+
+      - name: Tag Docker Image
+        run: |
           docker tag netflix:latest 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
+
+      - name: Push Docker Image to ECR
+        run: |
           docker push 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
