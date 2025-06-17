@@ -8,6 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
+    environment: ecr-push  # optional GitHub environment
 
     steps:
     - name: Checkout code
@@ -29,6 +30,8 @@ jobs:
         docker tag netflix:latest 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
         docker push 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
 
-    - name: Trigger ArgoCD Sync (optional)
+    - name: Trigger ArgoCD Sync via Webhook
       run: |
-        curl -X POST https://ac2560c6ca1504b3fad86ed902e3ebc6-885551035.eu-north-1.elb.amazonaws.com/api/webhook
+        curl -X POST https://ac2560c6ca1504b3fad86ed902e3ebc6-885551035.eu-north-1.elb.amazonaws.com/api/webhook \
+        -H "Content-Type: application/json" \
+        -d '{}'
