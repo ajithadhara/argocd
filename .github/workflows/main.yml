@@ -8,7 +8,7 @@ on:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: ecr-push  # ✅ This should match the GitHub Environment where TMDB_V3_API_KEY is defined
+    environment: ecr-push  # ✅ This should match the GitHub Environment name
 
     steps:
       - name: Checkout Code
@@ -24,9 +24,9 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-     - name: Build Docker Image with TMDB Key
-      run: |
-        docker build \
+      - name: Build Docker Image with TMDB Key
+        run: |
+          docker build \
             --build-arg TMDB_V3_API_KEY=${{ vars.TMDB_V3_API_KEY }} \
             -t netflix .
 
