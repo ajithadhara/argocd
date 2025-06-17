@@ -1,37 +1,45 @@
-name: Build and Deploy to ECR (CI Only)
+name: Build and Push to Amazon ECR
 
 on:
   push:
     branches:
-      - main
+      - main  # Change this if your production branch is different
+
+permissions:
+  contents: read
+  id-token: write
 
 jobs:
   build-and-push:
+    name: Build and Deploy Docker Image to ECR
     runs-on: ubuntu-latest
-    environment: ecr-push  # 🔒 Environment storing AWS secrets
+    environment: ecr-push  # Must match your GitHub environment name where secrets exist
 
     steps:
-      - name: Checkout Code
+      - name: Checkout Repository
         uses: actions/checkout@v3
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          role-to-assume: arn:aws:iam::<YOUR_AWS_ACCOUNT_ID>:role/<YOUR_GITHUB_OIDC_ROLE>
+          role-session-name: github-actions
           aws-region: eu-north-1
 
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
-        with:
-          region: eu-north-1
 
-      - name: Build, Tag, and Push Docker Image to ECR
+      - name: Build Docker Image
         run: |
           docker build -t netflix .
+
+      - name: Tag Docker Image for ECR
+        run: |
           docker tag netflix:latest 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
+
+      - name: Push Docker Image to ECR
+        run: |
           docker push 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
 
-      - name: Update Deployment Manifests with New Image Tag (Optional)
-        if: always()  # Add auto-image update script if needed
-        run: echo "Handled by ArgoCD auto-sync"
+      - name: Echo Deployment Triggered
+        run: echo "Deployment will be automatically picked up by ArgoCD (auto-sync enabled)"
