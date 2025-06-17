@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: netflix-app
-        image: nasi101/netflix:latest
+        image: 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
         ports:
         - containerPort: 80
