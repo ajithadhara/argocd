@@ -24,9 +24,9 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build Docker Image with TMDB Key
-        run: |
-          docker build \
+     - name: Build Docker Image with TMDB Key
+      run: |
+        docker build \
             --build-arg TMDB_V3_API_KEY=${{ vars.TMDB_V3_API_KEY }} \
             -t netflix .
 
