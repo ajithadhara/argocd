@@ -11,7 +11,7 @@
 
 <div align="center">
   <img src="./public/assets/homepage-screenshot.png" alt="Home Page" width="100%" height="100%">
-  <p align="center">Deployed Netflix App - Home Page</p>
+  <p align="center">Deployed Netflix App - Pankaj singh</p>
 </div>
 
 # 🚀 Deploy Netflix App with DevOps Stack (EC2 + Docker + Kubernetes + ArgoCD + Prometheus + Trivy + Secrets)
