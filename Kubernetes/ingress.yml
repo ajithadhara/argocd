@@ -19,7 +19,7 @@ spec:
                 name: netflix-app-76667ff556-nj2dn
                 port:
                   number: 80
-    - host: k8s-default-netflixa-36b1864427-1627883695.eu-north-1.elb.amazonaws.com
+    - host: k8s-default-netflixi-3bf7bceda7-477401298.eu-north-1.elb.amazonaws.com
       http:
         paths:
           - path: /
