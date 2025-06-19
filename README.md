@@ -1,19 +1,22 @@
-
 <div align="center">
-  <img src="./public/assets/project-banner.png" alt="Project Banner" width="100%" height="100%">
-  <br>
-  <a href="https://github.com/pankajsinghveersatech/DevSecOps-Project-first">
-    <img src="./public/assets/netflix-logo.png" alt="Netflix Logo" width="100" height="32">
+  <img src="./Screenshot 2025-06-19 at 11.56.39 PM.jpeg" alt="Netflix Clone Preview" width="100%" height="100%">
+
+  <br><br>
+  <a href="http://test.dreamtoday.xyz">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg" alt="Netflix Logo" width="100" height="32">
   </a>
 </div>
 
 <br />
 
-<div align="center">
-  <img src="./public/assets/homepage-screenshot.png" alt="Home Page" width="100%" height="100%">
-  <p align="center">Deployed Netflix App - Pankaj singh</p>
-</div>
+# 🚀 Netflix Clone Deployment Project – DevOps Focused
 
+This is a **Netflix Clone App** deployed to **AWS EKS** using **Docker**, **ArgoCD**, and **Kubernetes**, with **Trivy** for container image scanning, **Prometheus** for monitoring, and a fully configured **Ingress with CNAME & Load Balancer**.
+
+---
+
+## 🌐 Live Demo:
+🔗 [http://test.dreamtoday.xyz](http://test.dreamtoday.xyz)
 # 🚀 Deploy Netflix App with DevOps Stack (EC2 + Docker + Kubernetes + ArgoCD + Prometheus + Trivy + Secrets)
 
 This project demonstrates how to build and deploy a Netflix clone using:
