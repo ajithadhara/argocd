@@ -1,5 +1,4 @@
-<div align="center">
-  <img src="./Screenshot 2025-06-19 at 11.56.39 PM.jpeg" alt="Netflix Clone Preview" width="100%" height="100%">
+
 
   <br><br>
   <a href="http://test.dreamtoday.xyz">
