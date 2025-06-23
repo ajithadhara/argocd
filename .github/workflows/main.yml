@@ -1,0 +1,39 @@
+name: Build and Deploy to EKS via ArgoCD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: ecr-push  # ✅ This should match the GitHub Environment name
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+
+      - name: Login to Amazon ECR
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build Docker Image with TMDB Key
+        run: |
+          docker build \
+            --build-arg TMDB_V3_API_KEY=${{ secrets.TMDB_V3_API_KEY }} \
+            -t netflix .
+
+      - name: Tag Docker Image
+        run: |
+          docker tag netflix:latest 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
+
+      - name: Push Docker Image to ECR
+        run: |
+          docker push 476768693646.dkr.ecr.eu-north-1.amazonaws.com/devops_sec:latest
