@@ -2,7 +2,28 @@ import { TMDB_V3_API_KEY } from "src/constant";
 import { tmdbApi } from "./apiSlice";
 import { MEDIA_TYPE, PaginatedMovieResult } from "src/types/Common";
 import { MovieDetail } from "src/types/Movie";
-import { createSlice, isAnyOf } from "@reduxjs/toolkit";
+import { createSlice, isAnyOf, PayloadAction } from "@reduxjs/toolkit";
+import type { Movie } from "src/types/Movie";
+
+// Define proper types for actions
+interface SetNextPageAction {
+  mediaType: string;
+  itemKey: string | number;
+}
+
+interface InitiateItemAction {
+  mediaType: string;
+  itemKey: string | number;
+}
+
+interface FulfilledAction {
+  page: number;
+  results: Movie[];
+  total_pages: number;
+  total_results: number;
+  mediaType: string;
+  itemKey: string | number;
+}
 
 const initialState: Record<string, Record<string, PaginatedMovieResult>> = {};
 export const initialItemState: PaginatedMovieResult = {
@@ -16,27 +37,27 @@ const discoverSlice = createSlice({
   name: "discover",
   initialState,
   reducers: {
-    setNextPage: (state, action) => {
+    setNextPage: (state, action: PayloadAction<SetNextPageAction>) => {
       const { mediaType, itemKey } = action.payload;
       state[mediaType][itemKey].page += 1;
     },
-    initiateItem: (state, action) => {
+    initiateItem: (state, action: PayloadAction<InitiateItemAction>) => {
       const { mediaType, itemKey } = action.payload;
       if (!state[mediaType]) {
         state[mediaType] = {};
       }
       if (!state[mediaType][itemKey]) {
-        state[mediaType][itemKey] = initialItemState;
+        state[mediaType][itemKey] = { ...initialItemState };
       }
     },
   },
-  extraReducers(builder) {
+  extraReducers: (builder) => {
     builder.addMatcher(
       isAnyOf(
         extendedApi.endpoints.getVideosByMediaTypeAndCustomGenre.matchFulfilled,
         extendedApi.endpoints.getVideosByMediaTypeAndGenreId.matchFulfilled
       ),
-      (state, action) => {
+      (state, action: PayloadAction<FulfilledAction>) => {
         const {
           page,
           results,
@@ -46,7 +67,15 @@ const discoverSlice = createSlice({
           itemKey,
         } = action.payload;
         state[mediaType][itemKey].page = page;
-        state[mediaType][itemKey].results.push(...results);
+        
+        // Get existing movie IDs to prevent duplicates
+        const existingIds = new Set(state[mediaType][itemKey].results.map((movie: Movie) => movie.id));
+        
+        // Filter out movies that already exist
+        const newResults = results.filter((movie: Movie) => !existingIds.has(movie.id));
+        
+        // Only add new unique movies
+        state[mediaType][itemKey].results.push(...newResults);
         state[mediaType][itemKey].total_pages = total_pages;
         state[mediaType][itemKey].total_results = total_results;
       }

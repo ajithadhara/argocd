@@ -345,6 +345,8 @@ pipeline{
 }
 ```
 
+### Troubleshooting Pipeline Issues
+
 > **Note:**  
 > If you encounter a "port already allocated" error during the final container deployment stage, remove the '--name netflix' part in the last stage:
 >
@@ -775,7 +777,7 @@ pipeline{
 }
 ```
 
-> **Note:** If you encounter any errors during pipeline execution, please refer to the troubleshooting section in [Phase 3 Pipeline Notes](#install-dependency-check-and-docker-tools-in-jenkins) for solutions.
+> **Note:** If you encounter any errors during pipeline execution, please refer to the troubleshooting section in [Troubleshooting Pipeline Issues](#troubleshooting-pipeline-issues) for solutions.
 
 
 # Phase 6: Kubernetes
