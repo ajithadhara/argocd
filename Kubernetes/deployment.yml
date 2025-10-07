@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
       - name: netflix-app
-        image: node
+        image: caddy
         ports:
         - containerPort: 80
